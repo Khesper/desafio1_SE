@@ -1,0 +1,48 @@
+function [L, U] = lu_decomposition(A)
+    % Get the size of matrix A
+    n = size(A, 1);
+    
+    % Initialize L and U matrices
+    L = eye(n);
+    U = A;
+
+    % Perform the LU decomposition
+    for j = 1:n
+        for i = j+1:n
+            % Calculate the factor for the L matrix
+            factor = U(i, j) / U(j, j);
+            L(i, j) = factor;
+            U(i, :) = U(i, :) - factor * U(j, :);
+        end
+    end
+end
+
+function x = solve_lu(L, U, b)
+    % Solve Ly = b for y
+    y = L \ b;  % Forward substitution
+    % Solve Ux = y for x
+    x = U \ y;  % Back substitution
+end
+
+% Define matrix A and vector b
+A = [8, 4, -1; 
+     -2, 5, 1; 
+     2, -2, 6];
+
+b = [11; 6.75; 7.625];
+
+% Perform LU decomposition
+[L, U] = lu_decomposition(A);
+
+% Display L and U
+disp('L:');
+disp(L);
+disp('U:');
+disp(U);
+
+% Solve Ax = b
+x = solve_lu(L, U, b);
+
+% Display the solution
+disp('Solution x:');
+disp(x);
